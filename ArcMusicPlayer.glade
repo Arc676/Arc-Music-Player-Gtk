@@ -14,6 +14,7 @@
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
+    <signal name="destroy" handler="windowDestroyed" swapped="no"/>
     <child>
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
@@ -47,6 +48,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="playpause" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -65,6 +67,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="rw30" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -77,6 +80,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="rw10" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -89,6 +93,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="ff30" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -101,6 +106,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="ff10" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -162,6 +168,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="addSongs" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -174,6 +181,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="removeSongs" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -186,6 +194,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="savePlaylist" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -198,6 +207,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="loadPlaylist" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -210,6 +220,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="clearPlaylist" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -305,6 +316,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="about" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

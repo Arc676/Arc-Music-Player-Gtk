@@ -28,6 +28,26 @@ void about() {
 	gtk_widget_show(aboutWindow);
 }
 
+void rw10() {}
+
+void rw30() {}
+
+void ff10() {}
+
+void ff30() {}
+
+void addSongs() {}
+
+void removeSongs() {}
+
+void clearPlaylist() {}
+
+void loadPlaylist() {}
+
+void savePlaylist() {}
+
+void playpause() {}
+
 int main(int argc, char * argv[]){
 	gtk_init(&argc, &argv);
 
