@@ -55,11 +55,29 @@ void ArcMusicPlayer::loadPlaylist() {
 			while (std::getline(file, line)) {
 				playlist.push_back(line);
 			}
+			file.close();
 		}
 	}
 }
 
-void ArcMusicPlayer::savePlaylist() {}
+void ArcMusicPlayer::savePlaylist() {
+	Gtk::FileChooserDialog dialog("Select save location", Gtk::FILE_CHOOSER_ACTION_SAVE);
+	dialog.set_transient_for(*mainWindow);
+
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("OK", Gtk::RESPONSE_OK);
+
+	if (dialog.run() == Gtk::RESPONSE_OK) {
+		std::ofstream file;
+		file.open(dialog.get_filename());
+		if (file.is_open()) {
+			for (std::vector<std::string>::iterator it = playlist.begin(); it != playlist.end(); it++) {
+				file << *it << "\n";
+			}
+			file.close();
+		}
+	}
+}
 
 void ArcMusicPlayer::playpause() {}
 
