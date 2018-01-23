@@ -16,9 +16,14 @@
 #include <gtkmm.h>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
+#include <fstream>
 
 class ArcMusicPlayer {
 	Gtk::Window *aboutWindow;
+	Gtk::Window *mainWindow;
+
+	std::vector<std::string> playlist;
 
 	void about();
 
@@ -37,5 +42,7 @@ class ArcMusicPlayer {
 	void addSongs();
 	void removeSongs();
 public:
+	ArcMusicPlayer();
+
 	int run(int, char**);
 };

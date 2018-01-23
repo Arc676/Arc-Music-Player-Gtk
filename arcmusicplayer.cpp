@@ -31,13 +31,39 @@ void ArcMusicPlayer::addSongs() {}
 
 void ArcMusicPlayer::removeSongs() {}
 
-void ArcMusicPlayer::clearPlaylist() {}
+void ArcMusicPlayer::clearPlaylist() {
+	playlist.clear();
+}
 
-void ArcMusicPlayer::loadPlaylist() {}
+void ArcMusicPlayer::loadPlaylist() {
+	Gtk::FileChooserDialog dialog("Select playlist file");
+	dialog.set_transient_for(*mainWindow);
+
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("OK", Gtk::RESPONSE_OK);
+
+	auto filter_text = Gtk::FileFilter::create();
+	filter_text->set_name("Text files");
+	filter_text->add_mime_type("text/plain");
+	dialog.add_filter(filter_text);
+
+	if (dialog.run() == Gtk::RESPONSE_OK) {
+		std::ifstream file;
+		file.open(dialog.get_filename());
+		if (file.is_open()) {
+			std::string line;
+			while (std::getline(file, line)) {
+				playlist.push_back(line);
+			}
+		}
+	}
+}
 
 void ArcMusicPlayer::savePlaylist() {}
 
 void ArcMusicPlayer::playpause() {}
+
+ArcMusicPlayer::ArcMusicPlayer() : playlist() {}
 
 int main(int argc, char * argv[]){
 	ArcMusicPlayer* amp = new ArcMusicPlayer();
@@ -49,8 +75,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("ArcMusicPlayer.glade");
 
-	Gtk::Window *window = nullptr;
-	builder->get_widget("window1", window);
+	builder->get_widget("window1", mainWindow);
 
 	builder->get_widget("aboutWindow", aboutWindow);
 
@@ -93,6 +118,6 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	// initialize interface and other stuff
 	srand(time(NULL));
 
-	return app->run(*window);
+	return app->run(*mainWindow);
 }
 
