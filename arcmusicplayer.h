@@ -19,11 +19,16 @@
 #include <vector>
 #include <fstream>
 
+#include "SDL.h"
+#include "SDL_mixer.h"
+
 class ArcMusicPlayer {
 	Gtk::Window *aboutWindow;
 	Gtk::Window *mainWindow;
 
 	std::vector<std::string> playlist;
+
+	Mix_Music *music;
 
 	void about();
 
