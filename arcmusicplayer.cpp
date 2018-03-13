@@ -96,7 +96,13 @@ ArcMusicPlayer::ArcMusicPlayer() : playlist() {}
 
 int main(int argc, char * argv[]){
 	ArcMusicPlayer* amp = new ArcMusicPlayer();
-	return amp->run(argc, argv);
+	int ret = amp->run(argc, argv);
+	if (ret == 0) {
+		Mix_HaltMusic();
+		Mix_FreeMusic(amp->music);
+		SDL_Quit();
+	}
+	return ret;
 }
 
 int ArcMusicPlayer::run(int argc, char* argv[]) {

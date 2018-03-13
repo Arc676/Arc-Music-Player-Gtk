@@ -28,8 +28,6 @@ class ArcMusicPlayer {
 
 	std::vector<std::string> playlist;
 
-	Mix_Music *music;
-
 	void about();
 
 	void rw10();
@@ -48,6 +46,8 @@ class ArcMusicPlayer {
 	void removeSongs();
 public:
 	ArcMusicPlayer();
+
+	Mix_Music *music;
 
 	int run(int, char**);
 };
