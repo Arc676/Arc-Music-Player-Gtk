@@ -17,7 +17,7 @@ SDLLIB=`sdl2-config --cflags --libs` -l SDL2_mixer
 
 # linker
 LD=g++
-LDFLAGS=$(PTHREAD) $(GTKLIB) -export-dynamic
+LDFLAGS=$(PTHREAD) $(SDLLIB) $(GTKLIB) -export-dynamic
 
 OBJS=arcmusicplayer.o
 
@@ -25,7 +25,7 @@ all: $(OBJS)
 	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 arcmusicplayer.o:
-	$(CC) -c $(CCFLAGS) arcmusicplayer.cpp $(GTKLIB) $(SDLLIB) -o arcmusicplayer.o
+	$(CC) -c $(CCFLAGS) arcmusicplayer.cpp $(SDLLIB) $(GTKLIB) -o arcmusicplayer.o
 
 clean:
 	rm -f *.o $(TARGET)

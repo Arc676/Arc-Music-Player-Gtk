@@ -79,7 +79,18 @@ void ArcMusicPlayer::savePlaylist() {
 	}
 }
 
-void ArcMusicPlayer::playpause() {}
+void ArcMusicPlayer::playpause() {
+	if (!music) {
+		return;
+	}
+	if (Mix_PausedMusic()) {
+		Mix_ResumeMusic();
+	} else if (Mix_PlayingMusic()) {
+		Mix_PauseMusic();
+	} else {
+		Mix_PlayMusic(music, 1);
+	}
+}
 
 ArcMusicPlayer::ArcMusicPlayer() : playlist() {}
 
@@ -89,6 +100,14 @@ int main(int argc, char * argv[]){
 }
 
 int ArcMusicPlayer::run(int argc, char* argv[]) {
+	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+		return 1;
+	}
+	if (Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3) {
+		return 2;
+	}
+	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+
 	auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
 	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("ArcMusicPlayer.glade");
