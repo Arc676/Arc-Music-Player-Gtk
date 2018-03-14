@@ -37,6 +37,7 @@ class ArcMusicPlayer {
 	void ff30();
 
 	void playpause();
+	void nextSong();
 
 	void clearPlaylist();
 	void savePlaylist();

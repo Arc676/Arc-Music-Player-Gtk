@@ -27,12 +27,18 @@ void ArcMusicPlayer::ff10() {}
 
 void ArcMusicPlayer::ff30() {}
 
+void musicStopped() {}
+
+void ArcMusicPlayer::nextSong() {}
+
 void ArcMusicPlayer::addSongs() {
 	Gtk::FileChooserDialog dialog("Select music files");
 	dialog.set_transient_for(*mainWindow);
 
 	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("OK", Gtk::RESPONSE_OK);
+
+	dialog.set_select_multiple();
 
 	auto filter_text = Gtk::FileFilter::create();
 	filter_text->set_name("Audio files");
@@ -136,6 +142,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 		return 2;
 	}
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+	Mix_HookMusicFinished(musicStopped);
 
 	auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
