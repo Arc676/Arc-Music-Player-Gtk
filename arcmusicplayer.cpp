@@ -27,12 +27,19 @@ void ArcMusicPlayer::ff10() {}
 
 void ArcMusicPlayer::ff30() {}
 
-void ArcMusicPlayer::addSongs() {}
+void ArcMusicPlayer::addSongs() {
+	updatePlaylist();
+}
 
-void ArcMusicPlayer::removeSongs() {}
+void ArcMusicPlayer::removeSongs() {
+	updatePlaylist();
+}
+
+void ArcMusicPlayer::updatePlaylist() {}
 
 void ArcMusicPlayer::clearPlaylist() {
 	playlist.clear();
+	updatePlaylist();
 }
 
 void ArcMusicPlayer::loadPlaylist() {
@@ -58,6 +65,7 @@ void ArcMusicPlayer::loadPlaylist() {
 			file.close();
 		}
 	}
+	updatePlaylist();
 }
 
 void ArcMusicPlayer::savePlaylist() {

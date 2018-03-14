@@ -44,6 +44,7 @@ class ArcMusicPlayer {
 
 	void addSongs();
 	void removeSongs();
+	void updatePlaylist();
 public:
 	ArcMusicPlayer();
 
