@@ -28,6 +28,21 @@ void ArcMusicPlayer::ff10() {}
 void ArcMusicPlayer::ff30() {}
 
 void ArcMusicPlayer::addSongs() {
+	Gtk::FileChooserDialog dialog("Select music files");
+	dialog.set_transient_for(*mainWindow);
+
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("OK", Gtk::RESPONSE_OK);
+
+	auto filter_text = Gtk::FileFilter::create();
+	filter_text->set_name("Audio files");
+	filter_text->add_mime_type("audio/mpeg");
+	dialog.add_filter(filter_text);
+
+	if (dialog.run() == Gtk::RESPONSE_OK) {
+		std::vector<std::string> files = dialog.get_filenames();
+		playlist.insert(playlist.end(), files.begin(), files.end());
+	}
 	updatePlaylist();
 }
 
