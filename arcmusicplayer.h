@@ -28,7 +28,12 @@ class ArcMusicPlayer {
 
 	std::vector<std::string> playlist;
 
+	unsigned int startTicks;
+	int lastPos;
+
 	void about();
+
+	void movePos(int);
 
 	void rw10();
 	void rw30();
@@ -37,7 +42,6 @@ class ArcMusicPlayer {
 	void ff30();
 
 	void playpause();
-	void nextSong();
 
 	void clearPlaylist();
 	void savePlaylist();
@@ -50,6 +54,7 @@ public:
 	ArcMusicPlayer();
 
 	Mix_Music *music;
+	void nextSong();
 
 	int run(int, char**);
 };

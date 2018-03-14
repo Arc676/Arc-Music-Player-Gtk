@@ -15,21 +15,43 @@
 
 #include "arcmusicplayer.h"
 
+ArcMusicPlayer* amp;
+
 void ArcMusicPlayer::about() {
 	aboutWindow->show();
 }
 
-void ArcMusicPlayer::rw10() {}
+void ArcMusicPlayer::movePos(int delta) {
+	Mix_RewindMusic();
+	int pos = (SDL_GetTicks() - startTicks) / 1000;
+	pos += delta;
+	startTicks -= delta * 1000;
+	Mix_SetMusicPosition((double)pos);
+}
 
-void ArcMusicPlayer::rw30() {}
+void ArcMusicPlayer::rw10() {
+	movePos(-10);
+}
 
-void ArcMusicPlayer::ff10() {}
+void ArcMusicPlayer::rw30() {
+	movePos(-30);
+}
 
-void ArcMusicPlayer::ff30() {}
+void ArcMusicPlayer::ff10() {
+	movePos(10);
+}
 
-void musicStopped() {}
+void ArcMusicPlayer::ff30() {
+	movePos(30);
+}
 
-void ArcMusicPlayer::nextSong() {}
+void musicStopped() {
+	amp->nextSong();
+}
+
+void ArcMusicPlayer::nextSong() {
+	startTicks = SDL_GetTicks();
+}
 
 void ArcMusicPlayer::addSongs() {
 	Gtk::FileChooserDialog dialog("Select music files");
@@ -113,10 +135,13 @@ void ArcMusicPlayer::playpause() {
 		return;
 	}
 	if (Mix_PausedMusic()) {
+		startTicks = SDL_GetTicks() - lastPos;
 		Mix_ResumeMusic();
 	} else if (Mix_PlayingMusic()) {
+		lastPos = (SDL_GetTicks() - startTicks) * 1000;
 		Mix_PauseMusic();
 	} else {
+		startTicks = SDL_GetTicks();
 		Mix_PlayMusic(music, 1);
 	}
 }
@@ -124,7 +149,7 @@ void ArcMusicPlayer::playpause() {
 ArcMusicPlayer::ArcMusicPlayer() : playlist() {}
 
 int main(int argc, char * argv[]){
-	ArcMusicPlayer* amp = new ArcMusicPlayer();
+	amp = new ArcMusicPlayer();
 	int ret = amp->run(argc, argv);
 	if (ret == 0) {
 		Mix_HaltMusic();
