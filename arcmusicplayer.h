@@ -31,6 +31,7 @@ class ArcMusicPlayer {
 
 	int currentSongIndex = 0;
 	std::vector<std::string> playlist;
+	Gtk::ComboBoxText *playlistModel;
 
 	unsigned int startTicks;
 	int lastPos;

@@ -72,7 +72,7 @@ void ArcMusicPlayer::nextSong() {
 		currentSongIndex = rand() * playlist.size();
 	} else {
 		int rep = repeatMode->get_active_row_number();
-		if (playlist.size() > currentSongIndex + 1 || rep == 1) {
+		if ((int)playlist.size() > currentSongIndex + 1 || rep == 1) {
 			if (rep != 1) {
 				currentSongIndex++;
 			}
@@ -113,7 +113,13 @@ void ArcMusicPlayer::removeSongs() {
 	updatePlaylist();
 }
 
-void ArcMusicPlayer::updatePlaylist() {}
+void ArcMusicPlayer::updatePlaylist() {
+	playlistModel->remove_all();
+	for (auto it : playlist) {
+		playlistModel->append(it);
+	}
+	playlistModel->set_active(currentSongIndex);
+}
 
 void ArcMusicPlayer::clearPlaylist() {
 	playlist.clear();
@@ -208,10 +214,13 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("ArcMusicPlayer.glade");
 
+	// get references to important UI elements
 	builder->get_widget("window1", mainWindow);
 	builder->get_widget("aboutWindow", aboutWindow);
 	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("repeatMode", repeatMode);
+
+	builder->get_widget("playlistBox", playlistModel);
 
 	// connect button signals
 	Gtk::Button *button = nullptr;
