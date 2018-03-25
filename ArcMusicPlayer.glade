@@ -54,6 +54,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Arc Music Player</property>
     <signal name="destroy" handler="windowDestroyed" swapped="no"/>
     <child>
       <object class="GtkBox" id="box3">

@@ -50,9 +50,9 @@ void musicStopped() {
 }
 
 void ArcMusicPlayer::playSong() {
-	music = Mix_LoadMUS(playlist[currentSongIndex]);
+	music = Mix_LoadMUS(playlist[currentSongIndex].c_str());
 	// update the slider once that's added
-	playPause();
+	playpause();
 	// get song duration once you figure out how to do that
 	updatePlaylist();
 }
@@ -62,7 +62,7 @@ void ArcMusicPlayer::nextSong() {
 	if (playlist.size() == 0) {
 		return;
 	}
-	if (enableShuffle->getActive()) {
+	if (enableShuffle->get_active()) {
 		playlist.erase(playlist.begin() + currentSongIndex);
 		if (playlist.size() == 0) {
 			currentSongIndex = 0;
@@ -80,6 +80,8 @@ void ArcMusicPlayer::nextSong() {
 	}
 	playSong();
 }
+
+void ArcMusicPlayer::prevSong() {}
 
 void ArcMusicPlayer::addSongs() {
 	Gtk::FileChooserDialog dialog("Select music files");
