@@ -331,7 +331,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="combobox1">
+                  <object class="GtkComboBox" id="repeatMode">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="active">0</property>

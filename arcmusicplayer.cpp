@@ -195,7 +195,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	builder->get_widget("window1", mainWindow);
 	builder->get_widget("aboutWindow", aboutWindow);
-	builder->get_widget("shuffleEnabled", enableShuffle);
+	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("repeatMode", repeatMode);
 
 	// connect button signals
