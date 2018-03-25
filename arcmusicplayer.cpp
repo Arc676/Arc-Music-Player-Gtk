@@ -49,6 +49,14 @@ void musicStopped() {
 	amp->nextSong();
 }
 
+void ArcMusicPlayer::playSong() {
+	music = Mix_LoadMUS(playlist[currentSongIndex]);
+	// update the slider once that's added
+	playPause();
+	// get song duration once you figure out how to do that
+	updatePlaylist();
+}
+
 void ArcMusicPlayer::nextSong() {
 	startTicks = SDL_GetTicks();
 	if (playlist.size() == 0) {

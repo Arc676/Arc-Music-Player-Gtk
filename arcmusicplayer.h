@@ -29,6 +29,7 @@ class ArcMusicPlayer {
 	Gtk::ToggleButton *enableShuffle;
 	Gtk::ComboBox *repeatMode;
 
+	Mix_Music *music;
 	std::vector<std::string> playlist;
 
 	unsigned int startTicks;
@@ -58,7 +59,6 @@ class ArcMusicPlayer {
 public:
 	ArcMusicPlayer();
 
-	Mix_Music *music;
 	void nextSong();
 
 	int run(int, char**);
