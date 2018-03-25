@@ -76,6 +76,11 @@ void ArcMusicPlayer::nextSong() {
 			if (rep != 1) {
 				currentSongIndex++;
 			}
+		} else {
+			currentSongIndex = 0;
+			if (rep == 0) {
+				return;
+			}
 		}
 	}
 	playSong();
