@@ -51,6 +51,26 @@ void musicStopped() {
 
 void ArcMusicPlayer::nextSong() {
 	startTicks = SDL_GetTicks();
+	if (playlist.size() == 0) {
+		return;
+	}
+	if (enableShuffle->getActive()) {
+		playlist.erase(playlist.begin() + currentSongIndex);
+		if (playlist.size() == 0) {
+			currentSongIndex = 0;
+			updatePlaylist();
+			return;
+		}
+		currentSongIndex = rand() * playlist.size();
+	} else {
+		int rep = repeatMode->get_active_row_number();
+		if (playlist.size() > currentSongIndex + 1 || rep == 1) {
+			if (rep != 1) {
+				currentSongIndex++;
+			}
+		}
+	}
+	playSong();
 }
 
 void ArcMusicPlayer::addSongs() {
@@ -174,8 +194,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("ArcMusicPlayer.glade");
 
 	builder->get_widget("window1", mainWindow);
-
 	builder->get_widget("aboutWindow", aboutWindow);
+	builder->get_widget("shuffleEnabled", enableShuffle);
+	builder->get_widget("repeatMode", repeatMode);
 
 	// connect button signals
 	Gtk::Button *button = nullptr;

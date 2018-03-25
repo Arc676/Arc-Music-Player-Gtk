@@ -26,10 +26,14 @@ class ArcMusicPlayer {
 	Gtk::Window *aboutWindow;
 	Gtk::Window *mainWindow;
 
+	Gtk::ToggleButton *enableShuffle;
+	Gtk::ComboBox *repeatMode;
+
 	std::vector<std::string> playlist;
 
 	unsigned int startTicks;
 	int lastPos;
+	bool isPlaying = false;
 
 	void about();
 
@@ -42,6 +46,7 @@ class ArcMusicPlayer {
 	void ff30();
 
 	void playpause();
+	void playSong();
 
 	void clearPlaylist();
 	void savePlaylist();
