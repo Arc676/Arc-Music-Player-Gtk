@@ -212,6 +212,12 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("aboutButton", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::about));
 
+	builder->get_widget("nextSong", button);
+	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::nextSong));
+
+	builder->get_widget("prevSong", button);
+	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::prevSong));
+
 	builder->get_widget("rw10Button", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::rw10));
 
