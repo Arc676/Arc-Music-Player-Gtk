@@ -57,6 +57,14 @@ void ArcMusicPlayer::playSong() {
 	updatePlaylist();
 }
 
+void ArcMusicPlayer::userChoseSong() {
+	if (isAlteringPlaylist) {
+		return;
+	}
+	currentSongIndex = playlistModel->get_active_row_number();
+	playSong();
+}
+
 void ArcMusicPlayer::nextSong() {
 	startTicks = SDL_GetTicks();
 	if (playlist.size() == 0) {
@@ -114,11 +122,13 @@ void ArcMusicPlayer::removeSongs() {
 }
 
 void ArcMusicPlayer::updatePlaylist() {
+	isAlteringPlaylist = 1;
 	playlistModel->remove_all();
 	for (auto it : playlist) {
 		playlistModel->append(it);
 	}
 	playlistModel->set_active(currentSongIndex);
+	isAlteringPlaylist = 0;
 }
 
 void ArcMusicPlayer::clearPlaylist() {
@@ -221,6 +231,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("repeatMode", repeatMode);
 
 	builder->get_widget("playlistBox", playlistModel);
+	playlistModel->signal_changed().connect(sigc::mem_fun(*this, &ArcMusicPlayer::userChoseSong));
 
 	// connect button signals
 	Gtk::Button *button = nullptr;

@@ -50,6 +50,9 @@ class ArcMusicPlayer {
 	void playpause();
 	void playSong();
 
+	int isAlteringPlaylist = 0;
+	void userChoseSong();
+
 	void prevSong();
 
 	void clearPlaylist();
