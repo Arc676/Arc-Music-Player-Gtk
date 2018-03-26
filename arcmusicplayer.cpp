@@ -50,11 +50,12 @@ void musicStopped() {
 }
 
 void ArcMusicPlayer::playSong() {
+	Mix_FreeMusic(music);
 	music = Mix_LoadMUS(playlist[currentSongIndex].c_str());
 	// update the slider once that's added
 	playpause();
 	// get song duration once you figure out how to do that
-	updatePlaylist();
+	playlistModel->set_active(currentSongIndex);
 }
 
 void ArcMusicPlayer::userChoseSong() {

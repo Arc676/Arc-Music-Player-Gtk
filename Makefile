@@ -17,7 +17,7 @@ SDLLIB=`sdl2-config --cflags --libs` -l SDL2_mixer
 LDFLAGS=$(SDLLIB) $(GTKLIB) -export-dynamic
 
 debug: CCFLAGS += $(DEBUG)
-debug: all
+debug: amp
 
 amp:
 	$(CC) $(CCFLAGS) arcmusicplayer.cpp $(SDLLIB) $(GTKLIB) -o $(TARGET) $(LDFLAGS)
