@@ -73,12 +73,13 @@ void ArcMusicPlayer::nextSong() {
 	}
 	if (enableShuffle->get_active()) {
 		playlist.erase(playlist.begin() + currentSongIndex);
+		updatePlaylist();
 		if (playlist.size() == 0) {
 			currentSongIndex = 0;
 			updatePlaylist();
 			return;
 		}
-		currentSongIndex = rand() * playlist.size();
+		currentSongIndex = rand() % playlist.size();
 	} else {
 		int rep = repeatMode->get_active_row_number();
 		if ((int)playlist.size() > currentSongIndex + 1 || rep == 1) {
