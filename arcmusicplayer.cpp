@@ -156,6 +156,20 @@ void ArcMusicPlayer::loadPlaylist() {
 		if (file.is_open()) {
 			std::string line;
 			while (std::getline(file, line)) {
+				if (line == "[StateInfo]") {
+					int shuf, rep;
+					file >> shuf;
+					file >> rep;
+					file >> line;
+					if (line != "[EndStateInfo]") {
+						file.close();
+						return;
+					}
+					enableShuffle->set_active(shuf);
+					repeatMode->set_active(rep);
+					saveState->set_active(1);
+					continue;
+				}
 				playlist.push_back(line);
 			}
 			file.close();
@@ -175,6 +189,12 @@ void ArcMusicPlayer::savePlaylist() {
 		std::ofstream file;
 		file.open(dialog.get_filename());
 		if (file.is_open()) {
+			if (saveState->get_active()) {
+				file << "[StateInfo]\n";
+				file << enableShuffle->get_active() << "\n";
+				file << repeatMode->get_active_row_number() << "\n";
+				file << "[EndStateInfo]\n";
+			}
 			for (std::vector<std::string>::iterator it = playlist.begin(); it != playlist.end(); it++) {
 				file << *it << "\n";
 			}
@@ -230,6 +250,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("window1", mainWindow);
 	builder->get_widget("aboutWindow", aboutWindow);
 	builder->get_widget("enableShuffle", enableShuffle);
+	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
 
 	builder->get_widget("playlistBox", playlistModel);

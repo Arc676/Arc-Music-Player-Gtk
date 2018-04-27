@@ -28,6 +28,7 @@ class ArcMusicPlayer {
 
 	Gtk::ToggleButton *enableShuffle;
 	Gtk::ComboBox *repeatMode;
+	Gtk::ToggleButton *saveState;
 
 	int currentSongIndex = 0;
 	std::vector<std::string> playlist;
