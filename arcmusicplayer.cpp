@@ -46,7 +46,7 @@ void ArcMusicPlayer::ff30() {
 }
 
 void musicStopped() {
-	amp->nextSong();
+	amp->dispatcher.emit();
 }
 
 void ArcMusicPlayer::playSong() {
@@ -76,7 +76,6 @@ void ArcMusicPlayer::nextSong() {
 		updatePlaylist();
 		if (playlist.size() == 0) {
 			currentSongIndex = 0;
-			updatePlaylist();
 			return;
 		}
 		currentSongIndex = rand() % playlist.size();
@@ -221,7 +220,7 @@ void ArcMusicPlayer::playpause() {
 	}
 }
 
-ArcMusicPlayer::ArcMusicPlayer() : playlist() {}
+ArcMusicPlayer::ArcMusicPlayer() : playlist(), dispatcher() {}
 
 int main(int argc, char * argv[]){
 	amp = new ArcMusicPlayer();
@@ -243,6 +242,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	}
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
 	Mix_HookMusicFinished(musicStopped);
+	dispatcher.connect(sigc::mem_fun(*this, &ArcMusicPlayer::nextSong));
 
 	auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 

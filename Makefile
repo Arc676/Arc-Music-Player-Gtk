@@ -23,4 +23,4 @@ amp:
 	$(CC) $(CCFLAGS) arcmusicplayer.cpp $(SDLLIB) $(GTKLIB) -o $(TARGET) $(LDFLAGS)
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f $(TARGET)

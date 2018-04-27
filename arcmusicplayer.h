@@ -66,7 +66,9 @@ class ArcMusicPlayer {
 public:
 	ArcMusicPlayer();
 
+	Glib::Dispatcher dispatcher;
 	Mix_Music *music;
+
 	void nextSong();
 
 	int run(int, char**);
