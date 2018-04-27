@@ -21,6 +21,11 @@ void ArcMusicPlayer::about() {
 	aboutWindow->show();
 }
 
+void ArcMusicPlayer::volumeChanged() {
+	int vol = (int)volumeSlider->get_value();
+	Mix_VolumeMusic(vol);
+}
+
 void ArcMusicPlayer::movePos(int delta) {
 	Mix_RewindMusic();
 	int pos = (SDL_GetTicks() - startTicks) / 1000;
@@ -254,6 +259,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
+
+	builder->get_widget("volumeSlider", volumeSlider);
+	volumeSlider->signal_value_changed().connect(sigc::mem_fun(*this, &ArcMusicPlayer::volumeChanged));
 
 	builder->get_widget("playlistBox", playlistModel);
 	playlistModel->signal_changed().connect(sigc::mem_fun(*this, &ArcMusicPlayer::userChoseSong));

@@ -29,6 +29,7 @@ class ArcMusicPlayer {
 	Gtk::ToggleButton *enableShuffle;
 	Gtk::ComboBox *repeatMode;
 	Gtk::ToggleButton *saveState;
+	Gtk::Scale *volumeSlider;
 
 	int currentSongIndex = 0;
 	std::vector<std::string> playlist;
@@ -41,6 +42,7 @@ class ArcMusicPlayer {
 	void about();
 
 	void movePos(int);
+	void volumeChanged();
 
 	void rw10();
 	void rw30();
