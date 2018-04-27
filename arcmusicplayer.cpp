@@ -204,7 +204,9 @@ void ArcMusicPlayer::savePlaylist() {
 }
 
 void ArcMusicPlayer::playpause() {
-	if (!music) {
+	if (!music && (int)playlist.size() > 0) {
+		currentSongIndex = 0;
+		playSong();
 		return;
 	}
 	if (Mix_PausedMusic()) {
