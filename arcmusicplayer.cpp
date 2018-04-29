@@ -164,6 +164,7 @@ void ArcMusicPlayer::loadPlaylist() {
 					int shuf, rep;
 					file >> shuf;
 					file >> rep;
+					file >> line; // "show full path" setting not yet implemented on Linux
 					file >> line;
 					if (line != "[EndStateInfo]") {
 						file.close();
@@ -196,7 +197,7 @@ void ArcMusicPlayer::savePlaylist() {
 			if (saveState->get_active()) {
 				file << "[StateInfo]\n";
 				file << enableShuffle->get_active() << "\n";
-				file << repeatMode->get_active_row_number() << "\n";
+				file << repeatMode->get_active_row_number() << "\n0\n"; // dummy value for "show full path"
 				file << "[EndStateInfo]\n";
 			}
 			for (std::vector<std::string>::iterator it = playlist.begin(); it != playlist.end(); it++) {
