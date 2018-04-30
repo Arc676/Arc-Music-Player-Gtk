@@ -27,6 +27,7 @@ class ArcMusicPlayer {
 	Gtk::Window *mainWindow;
 
 	Gtk::ToggleButton *enableShuffle;
+	Gtk::ToggleButton *enableFullPath;
 	Gtk::ComboBox *repeatMode;
 	Gtk::ToggleButton *saveState;
 	Gtk::Scale *volumeSlider;

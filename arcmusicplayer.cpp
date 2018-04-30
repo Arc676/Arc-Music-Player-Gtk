@@ -131,7 +131,12 @@ void ArcMusicPlayer::updatePlaylist() {
 	isAlteringPlaylist = 1;
 	playlistModel->remove_all();
 	for (auto it : playlist) {
-		playlistModel->append(it);
+		if (enableFullPath->get_active()) {
+			playlistModel->append(it);
+		} else {
+			std::string base = it.substr(it.find_last_of("/") + 1);
+			playlistModel->append(base);
+		}
 	}
 	playlistModel->set_active(currentSongIndex);
 	isAlteringPlaylist = 0;
@@ -161,10 +166,10 @@ void ArcMusicPlayer::loadPlaylist() {
 			std::string line;
 			while (std::getline(file, line)) {
 				if (line == "[StateInfo]") {
-					int shuf, rep;
+					int shuf, rep, path;
 					file >> shuf;
 					file >> rep;
-					file >> line; // "show full path" setting not yet implemented on Linux
+					file >> path;
 					file >> line;
 					if (line != "[EndStateInfo]") {
 						file.close();
@@ -172,6 +177,7 @@ void ArcMusicPlayer::loadPlaylist() {
 					}
 					enableShuffle->set_active(shuf);
 					repeatMode->set_active(rep);
+					enableFullPath->set_active(path);
 					saveState->set_active(1);
 					continue;
 				} else if (line == "") {
@@ -199,7 +205,8 @@ void ArcMusicPlayer::savePlaylist() {
 			if (saveState->get_active()) {
 				file << "[StateInfo]\n";
 				file << enableShuffle->get_active() << "\n";
-				file << repeatMode->get_active_row_number() << "\n0\n"; // dummy value for "show full path"
+				file << repeatMode->get_active_row_number() << "\n";
+				file << enableShuffle->get_active() << "\n";
 				file << "[EndStateInfo]\n";
 			}
 			for (std::vector<std::string>::iterator it = playlist.begin(); it != playlist.end(); it++) {
@@ -262,6 +269,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
+
+	builder->get_widget("enableFullPath", enableFullPath);
+	enableFullPath->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::updatePlaylist));
 
 	builder->get_widget("volumeSlider", volumeSlider);
 	volumeSlider->signal_value_changed().connect(sigc::mem_fun(*this, &ArcMusicPlayer::volumeChanged));
