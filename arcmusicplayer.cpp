@@ -174,6 +174,8 @@ void ArcMusicPlayer::loadPlaylist() {
 					repeatMode->set_active(rep);
 					saveState->set_active(1);
 					continue;
+				} else if (line == "") {
+					continue;
 				}
 				playlist.push_back(line);
 			}
