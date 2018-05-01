@@ -206,11 +206,11 @@ void ArcMusicPlayer::savePlaylist() {
 				file << "[StateInfo]\n";
 				file << enableShuffle->get_active() << "\n";
 				file << repeatMode->get_active_row_number() << "\n";
-				file << enableShuffle->get_active() << "\n";
+				file << enableFullPath->get_active() << "\n";
 				file << "[EndStateInfo]\n";
 			}
-			for (std::vector<std::string>::iterator it = playlist.begin(); it != playlist.end(); it++) {
-				file << *it << "\n";
+			for (auto it : playlist) {
+				file << it << "\n";
 			}
 			file.close();
 		}
