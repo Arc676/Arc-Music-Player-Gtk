@@ -3,7 +3,9 @@ GTK version of Arc Music Player for Linux (you can check out the repository for 
 
 Please check the README for the Mac version for more info regarding the application.
 
-Project available under GPLv3
+### Legal
+
+Project available under GPLv3 (full license text in `LICENSE`). SDL and SDL Mixer libraries available under Zlib license (license text in `Zlib`). The Gtkmm library is available under the Lesser GPL (the LGPL consist of the GPLv3 terms plus some additional terms which can be found in `LGPL`).
 
 ### Dependencies
 
