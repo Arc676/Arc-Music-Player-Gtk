@@ -40,31 +40,93 @@ class ArcMusicPlayer {
 	int lastPos;
 	bool isPlaying = false;
 
+	/**
+	 * Show about window
+	 */
 	void about();
 
-	void movePos(int);
+	/**
+	 * Rewind or fast forward by the given time difference
+	 * @param delta Time to rewind or seek in seconds
+	 */
+	void movePos(int delta);
+
+	/**
+	 * React to volume change from UI
+	 */
 	void volumeChanged();
 
+	/**
+	 * Rewind 10 seconds
+	 */
 	void rw10();
+
+	/**
+	 * Rewind 30 seconds
+	 */
 	void rw30();
 
+	/**
+	 * Fast forward 10 seconds
+	 */
 	void ff10();
+
+	/**
+	 * Fast forward 30 seconds
+	 */
 	void ff30();
 
+	/**
+	 * Toggle playback
+	 */
 	void playpause();
+
+	/**
+	 * Play the currently selected song
+	 */
 	void playSong();
 
 	int isAlteringPlaylist = 0;
+
+	/**
+	 * React to user choosing a different song in the dropdown
+	 */
 	void userChoseSong();
 
+	/**
+	 * Go back to the previous song
+	 */
 	void prevSong();
 
+	/**
+	 * Clear the user's playlist
+	 */
 	void clearPlaylist();
+
+	/**
+	 * Write the current playlist to disk
+	 */
 	void savePlaylist();
+
+	/**
+	 * Load a playlist from disk
+	 */
 	void loadPlaylist();
 
+	/**
+	 * Add songs to the playlist
+	 */
 	void addSongs();
+
+	/**
+	 * Remove songs from the playlist
+	 */
 	void removeSongs();
+
+	/**
+	 * Update the dropdown menu to reflect the contents
+	 * of the playlist
+	 */
 	void updatePlaylist();
 public:
 	ArcMusicPlayer();
@@ -72,6 +134,9 @@ public:
 	Glib::Dispatcher dispatcher;
 	Mix_Music *music;
 
+	/**
+	 * Go to the next song
+	 */
 	void nextSong();
 
 	int run(int, char**);
