@@ -19,6 +19,8 @@
 #include <vector>
 #include <fstream>
 
+#include <libnotify/notify.h>
+
 #include "SDL.h"
 #include "SDL_mixer.h"
 

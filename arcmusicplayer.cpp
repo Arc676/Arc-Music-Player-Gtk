@@ -56,11 +56,17 @@ void musicStopped() {
 
 void ArcMusicPlayer::playSong() {
 	Mix_FreeMusic(music);
-	music = Mix_LoadMUS(playlist[currentSongIndex].c_str());
-	// update the slider once that's added
+	const char* song = playlist[currentSongIndex].c_str();
+	music = Mix_LoadMUS(song);
+	// TODO: update the slider once that's added
 	playpause();
-	// get song duration once you figure out how to do that
+	// TODO: get song duration once you figure out how to do that
 	playlistModel->set_active(currentSongIndex);
+
+	// show notification
+	NotifyNotification* n = notify_notification_new("Now playing", song, 0);
+	notify_notification_set_timeout(n, 2000);
+	notify_notification_show(n, 0);
 }
 
 void ArcMusicPlayer::userChoseSong() {
@@ -249,6 +255,7 @@ int main(int argc, char * argv[]){
 }
 
 int ArcMusicPlayer::run(int argc, char* argv[]) {
+	// initialize SDL library
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 		return 1;
 	}
@@ -258,6 +265,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
 	Mix_HookMusicFinished(musicStopped);
 	dispatcher.connect(sigc::mem_fun(*this, &ArcMusicPlayer::nextSong));
+
+	// initialize notifications library
+	notify_init("Arc Music Player");
 
 	auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
