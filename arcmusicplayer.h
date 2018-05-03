@@ -88,7 +88,12 @@ class ArcMusicPlayer {
 	 */
 	void playSong();
 
-	int isAlteringPlaylist = 0;
+	/**
+	 * Indicates whether the playlist is being modified
+	 * internally; prevents userChoseSong from responding
+	 * to internal actions
+	 */
+	bool isAlteringPlaylist = 0;
 
 	/**
 	 * React to user choosing a different song in the dropdown

@@ -61,7 +61,11 @@ void ArcMusicPlayer::playSong() {
 	// TODO: update the slider once that's added
 	playpause();
 	// TODO: get song duration once you figure out how to do that
+
+	// update playlist dropdown
+	isAlteringPlaylist = true;
 	playlistModel->set_active(currentSongIndex);
+	isAlteringPlaylist = false;
 
 	// show notification
 	NotifyNotification* n = notify_notification_new("Now playing", song, 0);
@@ -134,7 +138,7 @@ void ArcMusicPlayer::removeSongs() {
 }
 
 void ArcMusicPlayer::updatePlaylist() {
-	isAlteringPlaylist = 1;
+	isAlteringPlaylist = true;
 	playlistModel->remove_all();
 	for (auto it : playlist) {
 		if (enableFullPath->get_active()) {
@@ -145,7 +149,7 @@ void ArcMusicPlayer::updatePlaylist() {
 		}
 	}
 	playlistModel->set_active(currentSongIndex);
-	isAlteringPlaylist = 0;
+	isAlteringPlaylist = false;
 }
 
 void ArcMusicPlayer::clearPlaylist() {
