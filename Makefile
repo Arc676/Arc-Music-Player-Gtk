@@ -16,9 +16,10 @@ NOTIFYLIB=`pkg-config --cflags --libs libnotify`
 LIBS=$(SDLLIB) $(GTKLIB) $(NOTIFYLIB)
 
 # linker
-LDFLAGS=-export-dynamic
+LDFLAGS=
 
 debug: CCFLAGS += $(DEBUG)
+debug: LDFLAGS += -export-dynamic
 debug: amp
 
 amp:

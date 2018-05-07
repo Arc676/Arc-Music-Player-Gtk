@@ -68,9 +68,11 @@ void ArcMusicPlayer::playSong() {
 	isAlteringPlaylist = false;
 
 	// show notification
-	NotifyNotification* n = notify_notification_new("Now playing", song, 0);
-	notify_notification_set_timeout(n, 2000);
-	notify_notification_show(n, 0);
+	if (showNotifs->get_active()) {
+		NotifyNotification* n = notify_notification_new("Now playing", song, 0);
+		notify_notification_set_timeout(n, 2000);
+		notify_notification_show(n, 0);
+	}
 }
 
 void ArcMusicPlayer::userChoseSong() {
@@ -283,6 +285,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
+	builder->get_widget("enableNotifs", showNotifs);
 
 	builder->get_widget("enableFullPath", enableFullPath);
 	enableFullPath->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::updatePlaylist));
