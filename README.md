@@ -18,4 +18,15 @@ libsdl2-mixer-dev
 libnotify-dev
 ```
 
-**Note**: The project currently depends on `std::experimental::filesystem`.
+**Note**: The default target of the project Makefile currently depends on `std::experimental::filesystem`.
+
+### Compiling with `make`
+
+The Makefile provides the following targets:
+- `amp`: Compiles Arc Music Player for release
+- `debug`: Sets up compilation for debugging by passing `-g -O0` and `-export-dynamic` before compiling the `amp` target
+
+If `std::experimental::filesystem` is not available on your machine or you otherwise cannot compile Arc Music Player due to its use of experimental features, you can disable their use by passing `NOEXP=1` when calling `make`.
+
+Features disabled when experimental code is disabled:
+- Adding directories of music files

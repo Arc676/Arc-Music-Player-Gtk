@@ -8,7 +8,8 @@ DEBUG=-g -O0
 # warnings
 WARN=-Wall
 
-CCFLAGS=$(WARN) --std=c++17
+NOEXP=0
+CCFLAGS=$(WARN) --std=c++17 -D NOEXP=$(NOEXP)
 
 GTKLIB=`pkg-config --cflags --libs gtkmm-3.0`
 SDLLIB=`sdl2-config --cflags --libs` -l SDL2_mixer
@@ -18,12 +19,12 @@ LIBS=$(SDLLIB) $(GTKLIB) $(NOTIFYLIB)
 # linker
 LDFLAGS=-l stdc++fs
 
-debug: CCFLAGS += $(DEBUG)
-debug: LDFLAGS += -export-dynamic
-debug: amp
-
 amp:
 	$(CC) $(CCFLAGS) arcmusicplayer.cpp $(LIBS) -o $(TARGET) $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET)
+
+debug: CCFLAGS += $(DEBUG)
+debug: LDFLAGS += -export-dynamic
+debug: amp

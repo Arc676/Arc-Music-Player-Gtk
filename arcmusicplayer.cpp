@@ -146,6 +146,7 @@ void ArcMusicPlayer::addSongs() {
 }
 
 void ArcMusicPlayer::addDir() {
+	#ifndef NOEXP
 	std::vector<std::string> paths = getPaths(true);
 	std::vector<std::string> files;
 	for (auto path : paths) {
@@ -158,6 +159,7 @@ void ArcMusicPlayer::addDir() {
 		}
 	}
 	appendToPlaylist(files);
+	#endif
 }
 
 void ArcMusicPlayer::appendToPlaylist(std::vector<std::string> files) {
