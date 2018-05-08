@@ -17,3 +17,5 @@ libsdl2-dev
 libsdl2-mixer-dev
 libnotify-dev
 ```
+
+**Note**: The project currently depends on `std::experimental::filesystem`.

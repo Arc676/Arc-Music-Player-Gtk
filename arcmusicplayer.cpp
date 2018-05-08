@@ -116,7 +116,11 @@ void ArcMusicPlayer::prevSong() {}
 
 std::vector<std::string> ArcMusicPlayer::getPaths(bool dir = false) {
 	std::vector<std::string> paths;
-	Gtk::FileChooserDialog dialog(*mainWindow, dir ? "Select folder" : "Select music files");
+	Gtk::FileChooserDialog dialog(
+		*mainWindow,
+		dir ? "Select folder" : "Select music files",
+		dir ? Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER : Gtk::FILE_CHOOSER_ACTION_OPEN
+	);
 
 	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("OK", Gtk::RESPONSE_OK);
