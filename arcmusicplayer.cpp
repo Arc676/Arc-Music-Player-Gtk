@@ -150,9 +150,10 @@ void ArcMusicPlayer::addDir() {
 	std::vector<std::string> files;
 	for (auto path : paths) {
 		namespace fs = std::experimental::filesystem;
-		for (fs::recursive_directory_iterator it(path), end; it != end; it++) {
-			if (!fs::is_directory(it->path())) {
-				files.push_back(it->path());
+		for (auto &it : fs::recursive_directory_iterator(path)) {
+			if (!fs::is_directory(it.path()) &&
+				it.path().extension() == ".mp3") {
+				files.push_back(it.path());
 			}
 		}
 	}
