@@ -8,7 +8,7 @@ DEBUG=-g -O0
 # warnings
 WARN=-Wall
 
-CCFLAGS=$(WARN) --std=c++11
+CCFLAGS=$(WARN) --std=c++17
 
 GTKLIB=`pkg-config --cflags --libs gtkmm-3.0`
 SDLLIB=`sdl2-config --cflags --libs` -l SDL2_mixer
@@ -16,7 +16,7 @@ NOTIFYLIB=`pkg-config --cflags --libs libnotify`
 LIBS=$(SDLLIB) $(GTKLIB) $(NOTIFYLIB)
 
 # linker
-LDFLAGS=
+LDFLAGS=-l stdc++fs
 
 debug: CCFLAGS += $(DEBUG)
 debug: LDFLAGS += -export-dynamic

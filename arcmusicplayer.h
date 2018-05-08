@@ -18,6 +18,7 @@
 #include <ctime>
 #include <vector>
 #include <fstream>
+#include <experimental/filesystem>
 
 #include <libnotify/notify.h>
 
@@ -122,9 +123,28 @@ class ArcMusicPlayer {
 	void loadPlaylist();
 
 	/**
+	 * Asks the user for a selection from the filesystem
+	 * @param dir Select directories instead of files
+	 * @return A list of files selected by the user
+	 */
+	std::vector<std::string> getPaths(bool dir);
+
+	/**
 	 * Add songs to the playlist
 	 */
 	void addSongs();
+
+	/**
+	 * Recursively search a directory tree
+	 * for files to add to the playlist
+	 */
+	void addDir();
+
+	/**
+	 * Append a list of files to the playlist
+	 * @param files A list of paths to files to add
+	 */
+	void appendToPlaylist(std::vector<std::string> files);
 
 	/**
 	 * Remove songs from the playlist

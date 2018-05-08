@@ -114,25 +114,52 @@ void ArcMusicPlayer::nextSong() {
 
 void ArcMusicPlayer::prevSong() {}
 
-void ArcMusicPlayer::addSongs() {
-	Gtk::FileChooserDialog dialog("Select music files");
-	dialog.set_transient_for(*mainWindow);
+std::vector<std::string> ArcMusicPlayer::getPaths(bool dir = false) {
+	std::vector<std::string> paths;
+	Gtk::FileChooserDialog dialog(*mainWindow, dir ? "Select folder" : "Select music files");
 
 	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("OK", Gtk::RESPONSE_OK);
 
 	dialog.set_select_multiple();
 
-	auto filter_text = Gtk::FileFilter::create();
-	filter_text->set_name("Audio files");
-	filter_text->add_mime_type("audio/mpeg");
-	dialog.add_filter(filter_text);
+	if (!dir) {
+		auto filter_text = Gtk::FileFilter::create();
+		filter_text->set_name("Audio files");
+		filter_text->add_mime_type("audio/mpeg");
+		dialog.add_filter(filter_text);
+	}
 
 	if (dialog.run() == Gtk::RESPONSE_OK) {
 		std::vector<std::string> files = dialog.get_filenames();
-		playlist.insert(playlist.end(), files.begin(), files.end());
+		paths.insert(paths.end(), files.begin(), files.end());
 	}
-	updatePlaylist();
+	return paths;
+}
+
+void ArcMusicPlayer::addSongs() {
+	appendToPlaylist(getPaths());
+}
+
+void ArcMusicPlayer::addDir() {
+	std::vector<std::string> paths = getPaths(true);
+	std::vector<std::string> files;
+	for (auto path : paths) {
+		namespace fs = std::experimental::filesystem;
+		for (fs::recursive_directory_iterator it(path), end; it != end; it++) {
+			if (!fs::is_directory(it->path())) {
+				files.push_back(it->path());
+			}
+		}
+	}
+	appendToPlaylist(files);
+}
+
+void ArcMusicPlayer::appendToPlaylist(std::vector<std::string> files) {
+	if (files.size() != 0) {
+		playlist.insert(playlist.end(), files.begin(), files.end());
+		updatePlaylist();
+	}
 }
 
 void ArcMusicPlayer::removeSongs() {
@@ -331,6 +358,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	builder->get_widget("addSongsButton", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::addSongs));
+
+	builder->get_widget("addDirButton", button);
+	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::addDir));
 
 	builder->get_widget("removeSongsButton", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::removeSongs));
