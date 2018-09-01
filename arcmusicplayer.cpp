@@ -55,7 +55,9 @@ void musicStopped() {
 }
 
 void ArcMusicPlayer::playSong() {
-	Mix_FreeMusic(music);
+	if (music) {
+		Mix_FreeMusic(music);
+	}
 	const char* song = playlist[currentSongIndex].c_str();
 	music = Mix_LoadMUS(song);
 	// TODO: update the slider once that's added
@@ -288,7 +290,11 @@ int main(int argc, char * argv[]){
 	int ret = amp->run(argc, argv);
 	if (ret == 0) {
 		Mix_HaltMusic();
-		Mix_FreeMusic(amp->music);
+		if (amp->music) {
+			Mix_FreeMusic(amp->music);
+		}
+		Mix_Quit();
+		Mix_CloseAudio();
 		SDL_Quit();
 	}
 	return ret;
@@ -299,10 +305,10 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 		return 1;
 	}
-	if (Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3) {
+	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+	if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3) {
 		return 2;
 	}
-	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
 	Mix_HookMusicFinished(musicStopped);
 	dispatcher.connect(sigc::mem_fun(*this, &ArcMusicPlayer::nextSong));
 

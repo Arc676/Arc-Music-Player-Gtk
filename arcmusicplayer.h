@@ -13,12 +13,6 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //See README and LICENSE for more details
 
-#if NOEXP == 0
-	#undef NOEXP
-#else
-	#define NOEXP
-#endif
-
 #include <gtkmm.h>
 #include <cstdlib>
 #include <ctime>
@@ -169,7 +163,7 @@ public:
 	ArcMusicPlayer();
 
 	Glib::Dispatcher dispatcher;
-	Mix_Music *music;
+	Mix_Music *music = nullptr;
 
 	/**
 	 * Go to the next song

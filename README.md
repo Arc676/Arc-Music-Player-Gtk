@@ -26,7 +26,9 @@ The Makefile provides the following targets:
 - `amp`: Compiles Arc Music Player for release
 - `debug`: Sets up compilation for debugging by passing `-g -O0` and `-export-dynamic` before compiling the `amp` target
 
-If `std::experimental::filesystem` is not available on your machine or you otherwise cannot compile Arc Music Player due to its use of experimental features, you can disable their use by passing `NOEXP=1` when calling `make`.
+If `std::experimental::filesystem` is not available on your machine or you otherwise cannot compile Arc Music Player due to its use of experimental features, you can disable their use by defining the `NOEXP` macro when calling `make`.
 
 Features disabled when experimental code is disabled:
 - Adding directories of music files
+
+By defining the `DEBUG` macro on compilation, the program is compiled in debug mode (no optimizations and with debug information for debuggers).
