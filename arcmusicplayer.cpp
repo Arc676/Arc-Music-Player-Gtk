@@ -21,6 +21,10 @@ void ArcMusicPlayer::about() {
 	aboutWindow->show();
 }
 
+void ArcMusicPlayer::editPlaylist() {
+	playlistWindow->show();
+}
+
 void ArcMusicPlayer::volumeChanged() {
 	int vol = (int)volumeSlider->get_value();
 	Mix_VolumeMusic(vol);
@@ -71,7 +75,9 @@ void ArcMusicPlayer::playSong() {
 
 	// show notification
 	if (showNotifs->get_active()) {
-		NotifyNotification* n = notify_notification_new("Now playing", song, 0);
+		int pos = playlist[currentSongIndex].find_last_of("/");
+		const char* title = &song[pos + 1];
+		NotifyNotification* n = notify_notification_new("Now playing", title, 0);
 		notify_notification_set_timeout(n, 2000);
 		notify_notification_show(n, 0);
 	}
@@ -211,29 +217,13 @@ void ArcMusicPlayer::loadPlaylist() {
 		std::ifstream file;
 		file.open(dialog.get_filename());
 		if (file.is_open()) {
+			std::vector<std::string> input = std::vector<std::string>();
 			std::string line;
 			while (std::getline(file, line)) {
-				if (line == "[StateInfo]") {
-					int shuf, rep, path;
-					file >> shuf;
-					file >> rep;
-					file >> path;
-					file >> line;
-					if (line != "[EndStateInfo]") {
-						file.close();
-						return;
-					}
-					enableShuffle->set_active(shuf);
-					repeatMode->set_active(rep);
-					enableFullPath->set_active(path);
-					saveState->set_active(1);
-					continue;
-				} else if (line == "") {
-					continue;
-				}
-				playlist.push_back(line);
+				input.push_back(line);
 			}
 			file.close();
+			loadState(input);
 		}
 	}
 	updatePlaylist();
@@ -250,18 +240,48 @@ void ArcMusicPlayer::savePlaylist() {
 		std::ofstream file;
 		file.open(dialog.get_filename());
 		if (file.is_open()) {
-			if (saveState->get_active()) {
-				file << "[StateInfo]\n";
-				file << enableShuffle->get_active() << "\n";
-				file << repeatMode->get_active_row_number() << "\n";
-				file << enableFullPath->get_active() << "\n";
-				file << "[EndStateInfo]\n";
-			}
-			for (auto it : playlist) {
-				file << it << "\n";
-			}
+			file << getWriteableState();
 			file.close();
 		}
+	}
+}
+
+std::string ArcMusicPlayer::getWriteableState() {
+	std::stringstream ss;
+	if (saveState->get_active()) {
+		ss << "[StateInfo]\n";
+		ss << enableShuffle->get_active() << "\n";
+		ss << repeatMode->get_active_row_number() << "\n";
+		ss << enableFullPath->get_active() << "\n";
+		ss << "[EndStateInfo]\n";
+	}
+	for (auto it : playlist) {
+		ss << it << "\n";
+	}
+	return ss.str();
+}
+
+void ArcMusicPlayer::loadState(std::vector<std::string> input) {
+	for (int i = 0; i < (int)input.size(); i++) {
+		std::string line = input.at(i);
+		if (line == "[StateInfo]") {
+			int shuf = std::stoi(input.at(i + 1));
+			int rep = std::stoi(input.at(i + 2));
+			int path = std::stoi(input.at(i + 3));
+			line = input.at(i + 4);
+			if (line != "[EndStateInfo]") {
+				return;
+			}
+			enableShuffle->set_active(shuf);
+			repeatMode->set_active(rep);
+			enableFullPath->set_active(path);
+			saveState->set_active(1);
+			i += 4;
+			continue;
+		} else if (line == "") {
+			continue;
+		}
+		playlist.push_back(line);
 	}
 }
 
@@ -322,7 +342,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	// get references to important UI elements
 	builder->get_widget("window1", mainWindow);
 	builder->get_widget("aboutWindow", aboutWindow);
+	builder->get_widget("playlistEditor", playlistWindow);
 	builder->get_widget("enableShuffle", enableShuffle);
+	builder->get_widget("enableAutosave", enableAutosave);
 	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
 	builder->get_widget("enableNotifs", showNotifs);
@@ -341,6 +363,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	builder->get_widget("aboutButton", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::about));
+
+	builder->get_widget("editPlaylistButton", button);
+	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::editPlaylist));
 
 	builder->get_widget("nextSong", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::nextSong));
@@ -384,6 +409,32 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	// initialize interface and other stuff
 	srand(time(NULL));
 
-	return app->run(*mainWindow);
+	std::ifstream file;
+	file.open(".arcmusicplayerstate.playlist");
+	if (file.is_open()) {
+		std::vector<std::string> input = std::vector<std::string>();
+		std::string line;
+		while (std::getline(file, line)) {
+			input.push_back(line);
+		}
+		file.close();
+		loadState(input);
+		enableAutosave->set_active(1);
+		updatePlaylist();
+	}
+
+	int ret = app->run(*mainWindow);
+
+	if (enableAutosave->get_active()) {
+		std::string state = getWriteableState();
+		std::ofstream file;
+		file.open(".arcmusicplayerstate.playlist");
+		if (file.is_open()) {
+			file << state;
+			file.close();
+		}
+	}
+
+	return ret;
 }
 

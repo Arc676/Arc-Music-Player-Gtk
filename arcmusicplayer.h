@@ -30,6 +30,7 @@
 
 class ArcMusicPlayer {
 	Gtk::Window *aboutWindow;
+	Gtk::Window *playlistWindow;
 	Gtk::Window *mainWindow;
 
 	Gtk::ToggleButton *enableShuffle;
@@ -38,6 +39,8 @@ class ArcMusicPlayer {
 	Gtk::ToggleButton *saveState;
 	Gtk::ToggleButton *showNotifs;
 	Gtk::Scale *volumeSlider;
+
+	Gtk::ToggleButton *enableAutosave;
 
 	int currentSongIndex = 0;
 	std::vector<std::string> playlist;
@@ -51,6 +54,11 @@ class ArcMusicPlayer {
 	 * Show about window
 	 */
 	void about();
+
+	/**
+	 * Show playlist editor window
+	 */
+	void editPlaylist();
 
 	/**
 	 * Rewind or fast forward by the given time difference
@@ -124,6 +132,18 @@ class ArcMusicPlayer {
 	 * Load a playlist from disk
 	 */
 	void loadPlaylist();
+
+	/**
+	 * Obtain the player's state so it can be written to disk
+	 * @return String encoded form of player state
+	 */
+	std::string getWriteableState();
+
+	/**
+	 * Sets the player state based on the given input
+	 * @param input String encoded form of desired state
+	 */
+	void loadState(std::vector<std::string> input);
 
 	/**
 	 * Asks the user for a selection from the filesystem
