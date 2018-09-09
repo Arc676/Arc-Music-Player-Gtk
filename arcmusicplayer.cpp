@@ -182,15 +182,19 @@ void ArcMusicPlayer::removeSongs() {
 }
 
 void ArcMusicPlayer::updatePlaylist() {
+	Gtk::TreeModel::Row row;
+	playlistList->clear();
 	isAlteringPlaylist = true;
 	playlistModel->remove_all();
 	for (auto it : playlist) {
-		if (enableFullPath->get_active()) {
-			playlistModel->append(it);
-		} else {
-			std::string base = it.substr(it.find_last_of("/") + 1);
-			playlistModel->append(base);
+		auto song = it;
+		if (!enableFullPath->get_active()) {
+			song = it.substr(it.find_last_of("/") + 1);
 		}
+		playlistModel->append(song);
+		// update table model
+		row = *(playlistList->append());
+		row[playlistColumns.song] = song;
 	}
 	playlistModel->set_active(currentSongIndex);
 	isAlteringPlaylist = false;
@@ -343,11 +347,17 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	builder->get_widget("window1", mainWindow);
 	builder->get_widget("aboutWindow", aboutWindow);
 	builder->get_widget("playlistEditor", playlistWindow);
+	builder->get_widget("playlistTable", playlistTable);
 	builder->get_widget("enableShuffle", enableShuffle);
 	builder->get_widget("enableAutosave", enableAutosave);
 	builder->get_widget("saveState", saveState);
 	builder->get_widget("repeatMode", repeatMode);
 	builder->get_widget("enableNotifs", showNotifs);
+
+	// set up table model
+	playlistList = Gtk::ListStore::create(playlistColumns);
+	playlistTable->set_model(playlistList);
+	playlistTable->append_column("Song", playlistColumns.song);
 
 	builder->get_widget("enableFullPath", enableFullPath);
 	enableFullPath->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::updatePlaylist));

@@ -28,6 +28,8 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
+#include "columns.h"
+
 class ArcMusicPlayer {
 	Gtk::Window *aboutWindow;
 	Gtk::Window *playlistWindow;
@@ -39,6 +41,10 @@ class ArcMusicPlayer {
 	Gtk::ToggleButton *saveState;
 	Gtk::ToggleButton *showNotifs;
 	Gtk::Scale *volumeSlider;
+
+	Gtk::TreeView *playlistTable;
+	Glib::RefPtr<Gtk::ListStore> playlistList;
+	ModelColumns playlistColumns;
 
 	Gtk::ToggleButton *enableAutosave;
 
