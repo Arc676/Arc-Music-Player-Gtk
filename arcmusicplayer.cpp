@@ -178,7 +178,21 @@ void ArcMusicPlayer::appendToPlaylist(std::vector<std::string> files) {
 }
 
 void ArcMusicPlayer::removeSongs() {
+	Glib::RefPtr<Gtk::TreeSelection> selection = playlistTable->get_selection();
+	selection->selected_foreach_iter(sigc::mem_fun(*this, &ArcMusicPlayer::removeSelectedSong));
 	updatePlaylist();
+}
+
+void ArcMusicPlayer::removeSelectedSong(const Gtk::TreeModel::iterator& iter) {
+	std::string song = (*iter).get_value(playlistColumns.song);
+	int i = 0;
+	for (auto it : playlist) {
+		if (it.substr(it.find_last_of("/") + 1) == song) {
+			break;
+		}
+		i++;
+	}
+	playlist.erase(playlist.begin() + i);
 }
 
 void ArcMusicPlayer::updatePlaylist() {
@@ -358,6 +372,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	playlistList = Gtk::ListStore::create(playlistColumns);
 	playlistTable->set_model(playlistList);
 	playlistTable->append_column("Song", playlistColumns.song);
+	playlistTable->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
 
 	builder->get_widget("enableFullPath", enableFullPath);
 	enableFullPath->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::updatePlaylist));

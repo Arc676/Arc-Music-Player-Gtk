@@ -181,6 +181,12 @@ class ArcMusicPlayer {
 	void removeSongs();
 
 	/**
+	 * Callback for removing songs from the playlist
+	 * @param iter Iterator pointing to the song to remove in the model
+	 */
+	void removeSelectedSong(const Gtk::TreeModel::iterator& iter);
+
+	/**
 	 * Update the dropdown menu to reflect the contents
 	 * of the playlist
 	 */
