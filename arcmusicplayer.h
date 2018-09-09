@@ -98,6 +98,12 @@ class ArcMusicPlayer {
 	void ff30();
 
 	/**
+	 * Checks whether the playlist has become empty and, if it is,
+	 * frees resources and resets player state for when songs are loaded again
+	 */
+	void checkPlaylistFinished();
+
+	/**
 	 * Toggle playback
 	 */
 	void playpause();

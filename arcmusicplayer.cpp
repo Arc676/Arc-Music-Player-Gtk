@@ -58,6 +58,16 @@ void musicStopped() {
 	amp->dispatcher.emit();
 }
 
+void ArcMusicPlayer::checkPlaylistFinished() {
+	if (playlist.size() == 0) {
+		if (music) {
+			Mix_FreeMusic(music);
+			music = nullptr;
+		}
+		currentSongIndex = 0;
+	}
+}
+
 void ArcMusicPlayer::playSong() {
 	if (music) {
 		Mix_FreeMusic(music);
@@ -93,34 +103,58 @@ void ArcMusicPlayer::userChoseSong() {
 
 void ArcMusicPlayer::nextSong() {
 	startTicks = SDL_GetTicks();
+	if (playlist.size() > 0) {
+		// if shuffle mode is active
+		if (enableShuffle->get_active()) {
+			playlist.erase(playlist.begin() + currentSongIndex);
+			updatePlaylist();
+			// stop playing if playlist is empty
+			if (playlist.size() == 0) {
+				currentSongIndex = 0;
+			} else {
+				currentSongIndex = rand() % playlist.size();
+				playSong();
+			}
+		} else {
+			// check for repeat mode
+			int rep = repeatMode->get_active_row_number();
+			// if playlist has NOT been exhausted or song repeat is on
+			if ((int)playlist.size() > currentSongIndex + 1 || rep == 1) {
+				// if song repeat is NOT on, move to next song
+				if (rep != 1) {
+					currentSongIndex++;
+				}
+				playSong();
+			} else {
+				// otherwise, either playlist is exhausted or repeat all is active
+				currentSongIndex = 0;
+				// start over if repeat all is active
+				if (rep != 0) {
+					playSong();
+				}
+			}
+		}
+	}
+	checkPlaylistFinished();
+}
+
+void ArcMusicPlayer::prevSong() {
 	if (playlist.size() == 0) {
 		return;
 	}
-	if (enableShuffle->get_active()) {
-		playlist.erase(playlist.begin() + currentSongIndex);
-		updatePlaylist();
-		if (playlist.size() == 0) {
+	if (SDL_GetTicks() - startTicks > 10000) {
+		playSong();
+		return;
+	}
+	if (!enableShuffle->get_active()) {
+		currentSongIndex--;
+		if (currentSongIndex < 0) {
 			currentSongIndex = 0;
 			return;
 		}
-		currentSongIndex = rand() % playlist.size();
-	} else {
-		int rep = repeatMode->get_active_row_number();
-		if ((int)playlist.size() > currentSongIndex + 1 || rep == 1) {
-			if (rep != 1) {
-				currentSongIndex++;
-			}
-		} else {
-			currentSongIndex = 0;
-			if (rep == 0) {
-				return;
-			}
-		}
+		playSong();
 	}
-	playSong();
 }
-
-void ArcMusicPlayer::prevSong() {}
 
 std::vector<std::string> ArcMusicPlayer::getPaths(bool dir = false) {
 	std::vector<std::string> paths;
@@ -315,7 +349,7 @@ void ArcMusicPlayer::playpause() {
 	} else if (Mix_PlayingMusic()) {
 		lastPos = (SDL_GetTicks() - startTicks) * 1000;
 		Mix_PauseMusic();
-	} else {
+	} else if ((int)playlist.size() > 0){
 		startTicks = SDL_GetTicks();
 		Mix_PlayMusic(music, 1);
 	}
