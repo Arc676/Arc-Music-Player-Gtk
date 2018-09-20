@@ -101,6 +101,11 @@ void ArcMusicPlayer::userChoseSong() {
 	playSong();
 }
 
+void ArcMusicPlayer::pickRandomSong() {
+	currentSongIndex = rand() % playlist.size();
+	playSong();
+}
+
 void ArcMusicPlayer::nextSong() {
 	startTicks = SDL_GetTicks();
 	if (playlist.size() > 0) {
@@ -464,6 +469,9 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	builder->get_widget("playpauseButton", button);
 	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::playpause));
+
+	builder->get_widget("randomSongButton", button);
+	button->signal_clicked().connect(sigc::mem_fun(*this, &ArcMusicPlayer::pickRandomSong));
 
 	// initialize interface and other stuff
 	srand(time(NULL));

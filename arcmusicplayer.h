@@ -126,6 +126,11 @@ class ArcMusicPlayer {
 	void userChoseSong();
 
 	/**
+	 * Randomly picks a song in the playlist and starts playing
+	 */
+	void pickRandomSong();
+
+	/**
 	 * Go back to the previous song
 	 */
 	void prevSong();
