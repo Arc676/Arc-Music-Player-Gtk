@@ -1,4 +1,4 @@
-//Copyright (C) 2018 Arc676/Alessandro Vinciguerra
+//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -102,6 +102,9 @@ void ArcMusicPlayer::userChoseSong() {
 }
 
 void ArcMusicPlayer::pickRandomSong() {
+	if (playlist.size() == 0) {
+		return;
+	}
 	currentSongIndex = rand() % playlist.size();
 	playSong();
 }
@@ -307,6 +310,7 @@ std::string ArcMusicPlayer::getWriteableState() {
 	std::stringstream ss;
 	if (saveState->get_active()) {
 		ss << "[StateInfo]\n";
+		ss << volumeSlider->get_value() << "\n";
 		ss << enableShuffle->get_active() << "\n";
 		ss << repeatMode->get_active_row_number() << "\n";
 		ss << enableFullPath->get_active() << "\n";
@@ -322,18 +326,20 @@ void ArcMusicPlayer::loadState(std::vector<std::string> input) {
 	for (int i = 0; i < (int)input.size(); i++) {
 		std::string line = input.at(i);
 		if (line == "[StateInfo]") {
-			int shuf = std::stoi(input.at(i + 1));
-			int rep = std::stoi(input.at(i + 2));
-			int path = std::stoi(input.at(i + 3));
-			line = input.at(i + 4);
+			int vol = std::stoi(input.at(i + 1));
+			int shuf = std::stoi(input.at(i + 2));
+			int rep = std::stoi(input.at(i + 3));
+			int path = std::stoi(input.at(i + 4));
+			i += 5;
+			line = input.at(i);
 			if (line != "[EndStateInfo]") {
 				return;
 			}
+			volumeSlider->set_value(vol);
 			enableShuffle->set_active(shuf);
 			repeatMode->set_active(rep);
 			enableFullPath->set_active(path);
 			saveState->set_active(1);
-			i += 4;
 			continue;
 		} else if (line == "") {
 			continue;

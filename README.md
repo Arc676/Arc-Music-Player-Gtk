@@ -5,7 +5,7 @@ Please check the README for the Mac version for more info regarding the applicat
 
 ### Legal
 
-Project available under GPLv3 (full license text in `LICENSE`). SDL and SDL Mixer libraries available under Zlib license (license text in `Zlib`). The Gtkmm and `libnotify` libraries are available under the Lesser GPL (the LGPL consist of the GPLv3 terms plus some additional terms which can be found in `LGPL`).
+Project available under GPLv3 (full license text in `LICENSE`). SDL and SDL Mixer libraries available under Zlib license (license text in `Zlib`). The Gtkmm and `libnotify` libraries are available under the Lesser GPL (the LGPL consists of the GPLv3 terms plus some additional terms which can be found in `LGPL`).
 
 ### Dependencies
 
