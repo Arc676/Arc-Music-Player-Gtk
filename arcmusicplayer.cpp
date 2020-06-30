@@ -88,7 +88,6 @@ void ArcMusicPlayer::playSong() {
 		int pos = playlist[currentSongIndex].find_last_of("/");
 		const char* title = &song[pos + 1];
 		NotifyNotification* n = notify_notification_new("Now playing", title, 0);
-		notify_notification_set_timeout(n, 2000);
 		notify_notification_show(n, 0);
 	}
 }
@@ -376,8 +375,8 @@ int main(int argc, char * argv[]){
 		if (amp->music) {
 			Mix_FreeMusic(amp->music);
 		}
-		Mix_Quit();
 		Mix_CloseAudio();
+		Mix_Quit();
 		SDL_Quit();
 	}
 	return ret;
@@ -400,7 +399,12 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 
 	auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("ArcMusicPlayer.glade");
+	char buf[100];
+	memset(buf, 0, sizeof(buf));
+	size_t len = readlink("/proc/self/exe", buf, sizeof(buf));
+	buf[len] = 0;
+	std::string execpath = std::string(dirname(buf));
+	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file(execpath + "/ArcMusicPlayer.glade");
 
 	// get references to important UI elements
 	builder->get_widget("window1", mainWindow);
@@ -483,7 +487,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	srand(time(NULL));
 
 	std::ifstream file;
-	file.open(".arcmusicplayerstate.playlist");
+	file.open(execpath + "/.arcmusicplayerstate.playlist");
 	if (file.is_open()) {
 		std::vector<std::string> input = std::vector<std::string>();
 		std::string line;
@@ -501,7 +505,7 @@ int ArcMusicPlayer::run(int argc, char* argv[]) {
 	if (enableAutosave->get_active()) {
 		std::string state = getWriteableState();
 		std::ofstream file;
-		file.open(".arcmusicplayerstate.playlist");
+		file.open(execpath + "/.arcmusicplayerstate.playlist");
 		if (file.is_open()) {
 			file << state;
 			file.close();

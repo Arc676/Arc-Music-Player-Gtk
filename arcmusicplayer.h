@@ -19,6 +19,9 @@
 #include <vector>
 #include <fstream>
 
+#include <unistd.h>
+#include <libgen.h>
+
 #ifndef NOEXP
 #include <experimental/filesystem>
 #endif
